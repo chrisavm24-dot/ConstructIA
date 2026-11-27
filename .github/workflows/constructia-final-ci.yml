@@ -1,0 +1,24 @@
+name: ConstructIA proyecto final - pruebas
+on:
+  push:
+    paths:
+      - 'avance_final/**'
+      - 'constructia_chatbot.py'
+      - 'constructia_reglas.py'
+      - '.github/workflows/constructia-final-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias para pruebas del agente
+        run: python -m pip install 'nltk>=3.8,<4'
+      - name: Validar sintaxis
+        run: python -m compileall -q avance_final
+      - name: Ejecutar pruebas de reglas y agente
+        run: python -m unittest discover -s avance_final -p 'test_*.py' -v
